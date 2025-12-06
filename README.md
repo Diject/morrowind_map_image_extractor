@@ -1,0 +1,1 @@
+# morrowind_map_image_extractor
