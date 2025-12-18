@@ -189,6 +189,7 @@ local function saveCellMapImage()
             local fileNameTga = fileName..".tga"
 
             local texture = elem.texture
+            if not texture then goto continue end
 
             local pixelData = texture.pixelData
 
@@ -312,9 +313,13 @@ end
 
 --- @param e keyUpEventData
 local function keyUpCallback(e)
-    if not mapMenu then return end
     if running then return end
-    if not tes3.worldController.inputController:isShiftDown() then return end
+    if not tes3.worldController.inputController:isShiftDown() or
+            not tes3.worldController.inputController:isControlDown() then
+        return
+    end
+    tes3.runLegacyScript{command = "EnableMapMenu"}
+    if not mapMenu then return end
 
     print(string.format("Using directory: %s", directory))
     if not lfs.attributes(directory, "mode") and not createDirectory(directory) then
